@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-declare var SpeechRecognition: any;
+
 declare var webkitSpeechRecognition: any;
 
 @Injectable({
@@ -8,44 +8,51 @@ declare var webkitSpeechRecognition: any;
 })
 export class VoiceRecognitionService {
 
-  public recognition =  new  webkitSpeechRecognition() || new SpeechRecognition();
-  public text;
+ recognition =  new webkitSpeechRecognition();
+  isStoppedSpeechRecog = false;
+  public text = '';
+  tempWords;
 
   constructor() { }
 
-  initi() {
-    console.log("start inin")
-    // const { webkitSpeechRecognition }: IWindow = <IWindow>(<unknown>window);
+  init() {
 
-    //  this.recognition = new webkitSpeechRecognition();
+    this.recognition.interimResults = true;
+    this.recognition.lang = 'en-US';
 
-     this.recognition.interimResults = true;
-
-     this.recognition.lang = 'en-US';
-
-     this.recognition.addEventListener('result', (e) => {
-      // console.log(e.results);
+    this.recognition.addEventListener('result', (e) => {
       const transcript = Array.from(e.results)
         .map((result) => result[0])
         .map((result) => result.transcript)
         .join('');
-        this.text = transcript;
+      this.tempWords = transcript;
       console.log(transcript);
     });
+  }
 
+  start() {
+    this.isStoppedSpeechRecog = false;
+    this.recognition.start();
+    console.log("Speech recognition started")
     this.recognition.addEventListener('end', (condition) => {
-      // if (this.isStoppedSpeechRecog) {
-      //   this.recognition.stop();
-      //   console.log("End Speech Recognition by listner")
-      // } else {
-      //   this.tempSpeeach = this.tempSpeeach + ' ' + this.temp2Speeach;
-      //   this.temp2Speeach = '';
-      //   this.endTempRec = true;
-      //   this.recognition.start();
-      // }
-      this.recognition.start();
+      if (this.isStoppedSpeechRecog) {
+        this.recognition.stop();
+        console.log("End speech recognition")
+      } else {
+        this.wordConcat()
+        this.recognition.start();
+      }
     });
+  }
+  stop() {
+    this.isStoppedSpeechRecog = true;
+    this.wordConcat()
+    this.recognition.stop();
+    console.log("End speech recognition")
+  }
 
-    
+  wordConcat() {
+    this.text = this.text + ' ' + this.tempWords + '.';
+    this.tempWords = '';
   }
 }

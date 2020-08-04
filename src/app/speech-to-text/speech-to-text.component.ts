@@ -9,13 +9,23 @@ import { VoiceRecognitionService } from '../service/voice-recognition.service'
 })
 export class SpeechToTextComponent implements OnInit {
 
+  text: string;
+
   constructor(
     public service : VoiceRecognitionService
-  ) { }
+  ) { 
+    this.service.init()
+   }
 
   ngOnInit(): void {
-    this.service.initi()
-    this.service.recognition.start();
+  }
+
+  startService(){
+    this.service.start()
+  }
+
+  stopService(){
+    this.service.stop()
   }
 
 }
