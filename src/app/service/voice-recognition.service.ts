@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 
 declare var webkitSpeechRecognition: any;
@@ -12,13 +13,14 @@ export class VoiceRecognitionService {
   isStoppedSpeechRecog = false;
   public text = '';
   tempWords;
+  private router: Router
 
   constructor() { }
 
   init() {
 
     this.recognition.interimResults = true;
-    this.recognition.lang = 'en-US';
+    this.recognition.lang = 'fr-FR';
 
     this.recognition.addEventListener('result', (e) => {
       const transcript = Array.from(e.results)
@@ -33,7 +35,8 @@ export class VoiceRecognitionService {
   start() {
     this.isStoppedSpeechRecog = false;
     this.recognition.start();
-    console.log("Speech recognition started")
+    // this.router.navigateByUrl("")
+    console.log("Speech recognition started");
     this.recognition.addEventListener('end', (condition) => {
       if (this.isStoppedSpeechRecog) {
         this.recognition.stop();

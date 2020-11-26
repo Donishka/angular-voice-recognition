@@ -1,1 +1,23 @@
-<app-speech-to-text></app-speech-to-text>
+<mat-toolbar color="primary">
+    <button mat-icon-button (click)="sidenav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    Team Roth
+  </mat-toolbar>
+  
+  <mat-sidenav-container>
+    <mat-sidenav mode="side" [(opened)]="opened" (opened)="events.push('open!')"
+                 (closed)="events.push('close!')">
+        <mat-list>
+            <!-- <mat-list-item>
+                <button mat-button [routerLink]="['']" routerLinkActive="router-link-active" >Accueil</button>
+            </mat-list-item> -->
+            <mat-list-item>
+                <button mat-button [routerLink]="['cisla']" routerLinkActive="router-link-active" >Cisla</button>
+            </mat-list-item>
+        </mat-list>      
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
